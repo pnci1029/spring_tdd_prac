@@ -2,10 +2,13 @@ package com.demo.spring.prac.events;
 
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-
+@Entity
 @Builder @NoArgsConstructor @AllArgsConstructor @Getter @Setter @EqualsAndHashCode(of = "id")
 public class Event {
+    @Id
+    @GeneratedValue
     private Integer id;
     private String name;
     private String description;
@@ -19,5 +22,6 @@ public class Event {
     private int limitOfEnrollment;
     private boolean offline;
     private boolean free;
+    @Enumerated(value = EnumType.STRING)
     private EventStatus eventStatus;
 }

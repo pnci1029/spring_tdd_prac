@@ -2,8 +2,10 @@ package com.demo.spring.prac.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,6 +26,11 @@ public class EventControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @MockBean
+    EventRepository eventRepository;        // mock 빈으로 repository 저장을 하지만
+                                            // 널값으로 들어가기 때문에 값 조회 불가능
+                                            // -> Mockito 메소드로 널 일때 when - then 지정
+
     @Test
     void createEvent() throws Exception{
         Event target = Event.builder()
@@ -38,7 +45,8 @@ public class EventControllerTest {
                 .maxPrice(10000)
                 .name("김김김")
                 .build();
-
+        target.setId(1);
+        Mockito.when(eventRepository.save(target)).thenReturn(target);
 
         mockMvc.perform(post("/api/events")        //post요청
                         .contentType(MediaType.APPLICATION_JSON)
