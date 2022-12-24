@@ -1,5 +1,6 @@
 package com.demo.spring.prac.events;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -7,7 +8,11 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
@@ -16,13 +21,34 @@ public class EventControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Test
     void createEvent() throws Exception{
+        Event target = Event.builder()
+                .id(1)
+                .basePrice(1000)
+                .beginEnrollmentDateTime(LocalDateTime.now())
+                .eventStatus(EventStatus.BEGAN_ENROLLMENT)
+                .description("테스트")
+                .free(true)
+                .location("Seoul")
+                .closeEnrollmentDateTime(LocalDateTime.now())
+                .maxPrice(10000)
+                .name("김김김")
+                .build();
+
+
         mockMvc.perform(post("/api/events")        //post요청
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)          // 하이퍼미디어 제이슨 Json + Hal
+                        .content(objectMapper.writeValueAsString(target))
                 )
-                .andExpect(status().is(201));           //요청 후 http 상태 기대값 입력
+                .andDo(print())                               // 요청 응답 찍어보기
+                .andExpect(status().is(201))           //요청 후 http 상태 기대값 입력
+                .andExpect(jsonPath("id").exists());
+
     }
 
 }
