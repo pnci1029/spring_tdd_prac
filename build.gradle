@@ -29,6 +29,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 
+	/*
+	모델 매퍼
+	 */
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.0'
+
 //	runtimeOnly 'com.h2database:h2'
 //	runtimeOnly 'org.postgresql:postgresql'
 //	runtimeOnly 'com.h2database:h2'

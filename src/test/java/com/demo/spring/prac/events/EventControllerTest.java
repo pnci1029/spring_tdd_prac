@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +18,9 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
+//@WebMvcTest
+@SpringBootTest
+@AutoConfigureMockMvc
 public class EventControllerTest {
 
     @Autowired
@@ -46,7 +49,7 @@ public class EventControllerTest {
                 .name("김김김")
                 .build();
         target.setId(1);
-        Mockito.when(eventRepository.save(target)).thenReturn(target);
+//        Mockito.when(eventRepository.save(target)).thenReturn(target);
 
         mockMvc.perform(post("/api/events")        //post요청
                         .contentType(MediaType.APPLICATION_JSON)
